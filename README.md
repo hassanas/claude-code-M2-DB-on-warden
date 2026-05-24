@@ -11,33 +11,33 @@ This document provides the complete, step-by-step setup to connect Claude Deskto
 
 ---
 
-### 1. Update Your Warden Environment Configuration
-Open your project's existing configuration file located at `.warden/warden-env.yml` and ensure your `db` block maps port `3306` to your Windows host:
+## 🏎️ Step 1: Install the Python Package Manager (uv)
+Claude Desktop executes the MySQL/MariaDB server connection reliably using the `uv` environment tool. 
 
-```yaml
-services:
-  db:
-    ports:
-      - "3306:3306"
+Open your Windows **PowerShell** prompt and install `uv` globally via pip:
+```powershell
+pip install uv
 ```
+Verify the installation path by running:
+```powershell
+where.exe uv
+```
+*(Take note of the output path, e.g., `C:\Users\<YOUR_USER>\miniconda3\Scripts\uv.exe`)*
 
+---
 
 ## 🐳 Step 2: Open Warden Network Ports & Permissions
 
 Because your database container runs inside an isolated WSL2 Docker network bridge, you must explicitly expose its TCP port and database credentials to your local Windows host system.
 
-### 1. Create a Custom Compose Override
-Inside your local WSL project directory (`/mnt/d/...`), create a brand new file named **`warden-env.custom.yml`** and paste the following network mapping hooks:
+### 1. Update Your Warden Environment Configuration
+Open your project's existing configuration file located at `.warden/warden-env.yml` and ensure your `db` block maps port `3306` to your Windows host machine:
 
 ```yaml
-version: '3'
 services:
   db:
     ports:
       - "3306:3306"
-    command: --skip-name-resolve --max-allowed-packet=67108864
-    volumes:
-      - .${WARDEN_WEB_ROOT:-}/.warden/mysql/slow-query.cnf:/etc/mysql/conf.d/slow-query.cnf:ro
 ```
 
 ### 2. Apply Configuration and Rebuild Containers
