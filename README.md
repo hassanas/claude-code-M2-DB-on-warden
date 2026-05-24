@@ -11,20 +11,16 @@ This document provides the complete, step-by-step setup to connect Claude Deskto
 
 ---
 
-## 🏎️ Step 1: Install the Python Package Manager (uv)
-Claude Desktop executes the MySQL/MariaDB server connection reliably using the `uv` environment tool. 
+### 1. Update Your Warden Environment Configuration
+Open your project's existing configuration file located at `.warden/warden-env.yml` and ensure your `db` block maps port `3306` to your Windows host:
 
-Open your Windows **PowerShell** prompt and install `uv` globally via pip:
-```powershell
-pip install uv
+```yaml
+services:
+  db:
+    ports:
+      - "3306:3306"
 ```
-Verify the installation path by running:
-```powershell
-where.exe uv
-```
-*(Take note of the output path, e.g., `C:\Users\<YOUR_USER>\miniconda3\Scripts\uv.exe`)*
 
----
 
 ## 🐳 Step 2: Open Warden Network Ports & Permissions
 
